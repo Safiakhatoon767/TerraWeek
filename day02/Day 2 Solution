@@ -1,0 +1,225 @@
+Task 1: Familiarize yourself with the HCL syntax used in Terraform
+
+Learn about HCL blocks, parameters, and arguments
+
+HCL (HashiCorp Configuration Language) is a language used for writing configuration files that define infrastructure resources in various cloud platforms, such as Amazon Web Services (AWS), Microsoft Azure, or Google Cloud Platform (GCP). HCL is often used with infrastructure provisioning tools like Terraform.
+
+HCL Blocks: In HCL, a block is a collection of configuration settings that are grouped to define a specific resource or functionality. It is similar to a code block or a container that holds related configuration information. Each block has a specific type and can have multiple instances.
+
+For example, let's consider an AWS EC2 instance. In HCL, you would define an EC2 instance block that contains all the necessary configuration settings for that instance, such as the instance type, security groups, key pair, and so on. The EC2 instance block is a container that encapsulates all the related configuration settings for an EC2 instance.
+
+Parameters: Parameters are variables within a block that allow you to specify values that can be customized or changed based on your requirements. These parameters act as placeholders for values that you can provide when using the block.
+
+Continuing with our AWS EC2 instance example, you might have parameters like "instance_type" or "key_name" within the EC2 instance block. By using parameters, you can make your configurations more flexible and reusable. When you use the EC2 instance block, you can provide specific values for these parameters, such as "t2.micro" for the instance type and "my-keypair" for the key name.
+
+Arguments: Arguments are the actual values that are passed to the parameters within a block. They are used to provide specific values for the parameters when using the block.
+
+In our EC2 instance example, the arguments would be the specific values assigned to the parameters. For instance, if the "instance_type" parameter is set to "t2.micro" in the EC2 instance block, you would provide "t2.micro" as the argument when using that block.
+
+Here's an example HCL code snippet to illustrate these concepts:
+
+resource "aws_instance" "example_instance" {
+  instance_type = var.instance_type
+  key_name      = var.key_name
+  ami           = "ami-12345678"
+  subnet_id     = "subnet-12345678"
+  security_group_ids = [
+    "sg-12345678",
+    "sg-98765432"
+  ]
+}
+
+In this code snippet, "aws_instance" is the block type, and "example_instance" is the block name. Within the block, there are parameters like "instance_type" and "key_name," which are assigned specific values using arguments (provided via variables like var.instance_type and var.key_name).
+
+In summary, HCL blocks are containers that group related configuration settings together. Parameters are variables within the blocks that allow customization, and arguments are the specific values provided to those parameters when using the blocks.
+
+Explore the different types of resources and data sources available in Terraform
+
+Terraform is an infrastructure as code (IaC) tool that allows you to define and provision resources in cloud platforms and other infrastructure providers. It provides a rich set of resource types and data sources to interact with various services and manage your infrastructure. Let's explore the different types of resources and data sources available in Terraform with real-time examples.
+
+Resources: Resources in Terraform represent the infrastructure components you want to manage. They can include virtual machines, databases, networking components, storage resources, and more. Here are a few examples:
+
+a. AWS EC2 Instance:
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c94855ba95c71c99"
+  instance_type = "t2.micro"
+}
+
+This resource block defines an EC2 instance in AWS, specifying the Amazon Machine Image (AMI) and the instance type.
+
+b. Azure Virtual Network:
+
+resource "azurerm_virtual_network" "example" {
+  name                = "my-vnet"
+  address_space       = ["10.0.0.0/16"]
+  location            = "westus2"
+  resource_group_name = azurerm_resource_group.example.name
+}
+
+This resource block creates a virtual network in Azure, defining the name, address space, location, and the resource group it belongs to.
+
+Data Sources: Data sources in Terraform allow you to retrieve information about existing resources or external systems. They provide a way to reference data within your configuration. Examples include retrieving information about existing instances, security groups, or DNS records. Here are a couple of examples:
+
+a. AWS AMI Lookup:
+
+data "aws_ami" "example" {
+  most_recent = true
+
+  filter {
+    name   = "name"
+    values = ["my-ami-*"]
+  }
+}
+
+This data source block performs a lookup for the most recent AMI with a specific naming pattern, allowing you to reference it elsewhere in your configuration.
+
+b. Azure Resource Group:
+
+data "azurerm_resource_group" "example" {
+  name = "my-resource-group"
+}
+
+This data source block retrieves information about an existing Azure resource group, enabling you to reference its properties, such as location or ID.
+
+These are just a few examples of the many resources and data sources available in Terraform. 
+
+Task 2: Understand variables, data types, and expressions in HCL
+
+Create a variables.tf file and define a variable
+
+Certainly! Below is an example of a variables.tf file that defines a variable called easy_and_understanding_language with a real-time example:
+
+variable "easy_and_understanding_language" {
+  description = "An example of an easy and understanding programming language"
+  type        = string
+  default     = "Python"
+}
+
+In this example, the variable easy_and_understanding_language is defined as a string type variable. It has a default value of "Python", but you can override this default value when running Terraform commands.
+
+The variable is described as an example of an easy and understanding programming language. Python is a widely-used and highly regarded programming language known for its simplicity and readability. 
+
+It is often praised for its beginner-friendly syntax, extensive documentation, and wide range of libraries and frameworks that make it easy to build various types of applications.
+
+You can use this variable in your Terraform code by referencing it as var.easy_and_understanding_language. For example, you might use it in a resource block like this:
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c55b159cbfafe1f0"
+  instance_type = "t2.micro"
+  key_name      = "example-key"
+  tags = {
+    Name        = "example-instance"
+    Description = "An instance using ${var.easy_and_understanding_language}"
+  }
+}
+
+In this example, the easy_and_understanding_language variable is used in the instance's description tag to indicate that the instance is using the easy and understanding programming language (Python in this case).
+
+Use the variable in a main.tf file to create a "local_file" resource
+
+Let's assume you have a variable named "file_content" in your main.tf file, and you want to use it to create a "local_file" resource. The "local_file" resource allows you to create a file on the local filesystem.
+
+Here's an example of how you can achieve this in a main.tf file:
+
+variable "file_content" {
+  description = "Content of the file"
+  type        = string
+  default     = "Hello, World!"
+}
+
+resource "local_file" "example_file" {
+  filename = "/path/to/example.txt"
+  content  = var.file_content
+}
+
+In this example, the "file_content" variable is defined with a description, type, and default value. It's of type string, and the default value is set to "Hello, World!".
+
+The "local_file" resource is then created with the filename set to "/path/to/example.txt". This is the location where the file will be created. The "content" attribute is set to the value of the "file_content" variable using var.file_content. This ensures that the content of the file will be the value provided for the "file_content" variable.
+
+When you apply this configuration with Terraform, it will create a file at the specified location ("/path/to/example.txt") with the content you provide through the "file_content" variable.
+
+Remember to replace "/path/to/example.txt" with the actual path where you want the file to be created.
+
+Task 3: Practice writing Terraform configurations using HCL syntax
+
+Add required_providers to your configuration, such as Docker or AWS
+
+To add the required providers to your configuration, you can follow these steps using Docker and AWS as examples:
+
+Docker:
+
+terraform {
+  required_providers {
+    docker = {
+      source = "kreuzwerker/docker"
+      version = ">= 2.15.0"
+    }
+  }
+}
+
+In this example, we are specifying the Docker provider with a minimum version of 2.15.0. The source attribute indicates the provider's source registry, and the version attribute sets the minimum acceptable version.
+
+This configuration tells Terraform to use the specified Docker provider to manage Docker resources in your infrastructure. With this provider, you can create and manage Docker containers, images, networks, and other Docker-related resources.
+
+AWS (Amazon Web Services):
+
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = "~> 3.0"
+    }
+  }
+}
+
+In this example, we are specifying the AWS provider with a version constraint of approximately 3.0. The source attribute indicates the provider's source registry, and the version attribute sets the acceptable version range.
+
+This configuration instructs Terraform to use the specified AWS provider to interact with the AWS API and manage AWS resources. With this provider, you can create and manage EC2 instances, S3 buckets, VPCs, IAM roles, and various other AWS services.
+
+By including these required_providers blocks in your Terraform configuration, you ensure that the necessary provider plugins are installed and available for use by Terraform during deployment or provisioning operations.
+
+Test your configuration using the Terraform CLI and make any necessary adjustments
+
+To test your configuration using the Terraform CLI, you can follow these steps:
+
+Install Terraform: Ensure that you have Terraform installed on your system. You can download the latest version of Terraform from the official website (https://www.terraform.io/downloads.html) and follow the installation instructions for your operating system.
+
+Create a Terraform configuration: Set up a new directory for your Terraform configuration files. Inside this directory, create a file named main.tf (or any other name ending with .tf) and add your Terraform code. For example, let's say you want to create an AWS EC2 instance:
+
+provider "aws" {
+  region = "us-west-2"
+}
+
+resource "aws_instance" "example" {
+  ami           = "ami-0c94855ba95c71c99"
+  instance_type = "t2.micro"
+}
+
+Initialize the directory: Open a terminal or command prompt, navigate to the directory where your Terraform configuration files are located, and run the following command:
+
+terraform init
+
+This command initializes the Terraform working directory, downloads the necessary provider plugins, and sets up the backend.
+
+Preview the changes: Run the following command to see a summary of the changes that Terraform will make:
+
+terraform plan
+
+Terraform will analyze your configuration and display the planned changes, such as creating or modifying resources.
+
+Apply the changes: If the plan looks good, you can apply the changes by running:
+
+terraform apply
+
+Terraform will create the necessary infrastructure resources based on your configuration. It will prompt you to confirm the changes before proceeding.
+
+Verify the resources: Once the apply process is complete, you can verify that your resources have been created or modified as expected. For example, in the case of an AWS EC2 instance, you can check the AWS Management Console or use the AWS CLI to confirm that the instance was provisioned.
+
+Make adjustments: If you need to make changes to your Terraform configuration, you can modify the relevant parts of your main.tf file. For example, you could change the instance type or region for the AWS EC2 instance.
+
+Re-apply the changes: After making adjustments, run the terraform plan command again to preview the changes. If everything looks good, run terraform apply to apply the updated configuration.
+
+By following these steps, you can test your Terraform configuration using the Terraform CLI, apply changes to create or modify infrastructure resources, and make necessary adjustments as needed.
+
+Happy Learning🎉🚀
